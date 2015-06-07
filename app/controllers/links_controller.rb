@@ -1,7 +1,7 @@
 class LinksController < ApplicationController
-  def create
-    return redirect_to root_path if !signed_in?
+  before_filter :require_login
 
+  def create
     Link.create(permit_params)
 
     redirect_to user_path(current_user.id)

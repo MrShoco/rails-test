@@ -1,8 +1,8 @@
 class ImagesController < ApplicationController
-  def create
-    return redirect_to root_path if !signed_in?
+  before_filter :require_login
 
-    url = upload
+  def create
+    url = upload(params[:image][:file])
 
     Image.create(permit_params(url))
 
@@ -11,13 +11,16 @@ class ImagesController < ApplicationController
 
   private
 
-  def upload
-    uploaded_io = params[:image][:file]
-    File.open(Rails.root.join('app', 'assets', 'images', uploaded_io.original_filename), 'wb') do |file|
-      file.write(uploaded_io.read)
+  def upload(upload_io)
+    begin
+      url = upload_io.original_filename + SecureRandom.hex
+    end while(Image.exists?(url: url))
+
+    File.open(Rails.root.join('app', 'assets', 'images', url), 'wb') do |file|
+      file.write(upload_io.read)
     end
 
-    uploaded_io.original_filename
+    url
   end
 
   def permit_params(url)
