@@ -1,0 +1,49 @@
+<div id="user-page">
+  <div class="title">
+    <%= content_tag(:span, "Page of " + @user.name) %>
+    <%= image_tag(@user.image) %>
+  </div>
+  <h2>
+    <%= current_user == @user ? 'Your' : 'His' %> media collection:
+  </h2>
+  <div class="row">
+    <div class="col-md-6">
+      <ul class="list-group">
+        <% @user.images.each do |image| %>
+          <%= image_tag(image.url, { style: 'width: 100%;' }) %>
+        <% end %>
+
+        <% if signed_in? && current_user == @user %>
+          <li class="list-group-item">
+            <%= form_for @image, html: { class: 'navbar-form' } do |f| %>
+              <div class="form-group">
+                <%= f.file_field(:file, style: 'width: 200px') %>
+              </div>
+              <%= f.submit('Add photo', { class: 'btn btn-default' }) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <ul class="list-group">
+        <% @user.links.each do |link| %>
+          <li class="list-group-item">
+            <%= link_to(link.url, (link.url.include?('//') ? '' : '//') + link.url) %>
+          </li>
+        <% end %>
+
+        <% if signed_in? && current_user == @user %>
+          <li class="list-group-item">
+            <%= form_for @link, html: { class: 'navbar-form' } do |f| %>
+              <div class="form-group">
+                <%= f.text_field(:url, { class: 'form-control' }) %>
+              </div>
+              <%= f.submit('Add Link', { class: 'btn btn-default' }) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
