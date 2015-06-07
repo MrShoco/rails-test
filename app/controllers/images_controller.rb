@@ -13,7 +13,7 @@ class ImagesController < ApplicationController
 
   def upload(upload_io)
     begin
-      url = upload_io.original_filename + SecureRandom.hex
+      url = SecureRandom.hex
     end while(Image.exists?(url: url))
 
     File.open(Rails.root.join('app', 'assets', 'images', url), 'wb') do |file|
