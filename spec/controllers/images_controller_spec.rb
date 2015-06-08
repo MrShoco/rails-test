@@ -11,7 +11,7 @@ RSpec.describe ImagesController, type: :controller do
       it { expect(response).to redirect_to(root_path) }
     end
 
-    context 'when user is loggend in' do
+    context 'when user is logged in' do
       before { allow(subject).to receive(:current_user).and_return(user) }
 
       context 'when image is not provided' do
