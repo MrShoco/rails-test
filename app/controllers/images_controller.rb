@@ -1,9 +1,8 @@
 class ImagesController < ApplicationController
   before_filter :require_login
+  before_filter :image_provided
 
   def create
-    return redirect_to '422.html' if params[:image].blank?
-
     url = upload(params[:image][:file])
 
     image = Image.new(permit_params(url))
@@ -11,7 +10,7 @@ class ImagesController < ApplicationController
     if image.save
       redirect_to user_path(current_user.id)
     else
-      redirect_to '422.html'
+      redirect_to '/422.html'
     end
   end
 
@@ -33,5 +32,9 @@ class ImagesController < ApplicationController
     params[:image][:user_id] = current_user.id
     params[:image][:url] = url
     params.require(:image).permit(:url, :description, :user_id)
+  end
+
+  def image_provided
+    return redirect_to '/422.html' if params[:image].blank?
   end
 end
