@@ -2,9 +2,13 @@ class LinksController < ApplicationController
   before_filter :require_login
 
   def create
-    Link.create(permit_params)
+    link = Link.new(permit_params)
 
-    redirect_to user_path(current_user.id)
+    if link.save
+      redirect_to user_path(current_user.id)
+    else
+      redirect_to '422.html'
+    end
   end
 
   def permit_params

@@ -29,7 +29,7 @@
       <ul class="list-group">
         <% @user.links.each do |link| %>
           <li class="list-group-item">
-            <%= link_to(link.url, (link.url.include?('//') ? '' : '//') + link.url) %>
+            <%= link_to(link.url, format_link(link.url)) %>
           </li>
         <% end %>
 

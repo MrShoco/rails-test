@@ -2,11 +2,17 @@ class ImagesController < ApplicationController
   before_filter :require_login
 
   def create
+    return redirect_to '422.html' if params[:image].blank?
+
     url = upload(params[:image][:file])
 
-    Image.create(permit_params(url))
+    image = Image.new(permit_params(url))
 
-    redirect_to user_path(current_user.id)
+    if image.save
+      redirect_to user_path(current_user.id)
+    else
+      redirect_to '422.html'
+    end
   end
 
   private
