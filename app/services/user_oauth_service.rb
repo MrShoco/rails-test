@@ -1,5 +1,7 @@
 class UserOauthService
   def self.find_or_create(auth_hash)
+    return nil if auth_hash.blank?
+
     social_profile = SocialProfile.where(provider: auth_hash['provider'], uid: auth_hash['uid']).first
 
     social_profile ||= SocialProfile.create(auth_params(auth_hash))
